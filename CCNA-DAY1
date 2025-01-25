@@ -229,6 +229,37 @@ end
 
 ***********************************************************
 
+!!@@allow incoming calls
+configure terminal
+voice service voip
+ip address trusted list
+ipv4 0.0.0.0 0.0.0.0
+exit
+
+!OUTGOING CALL FROM CUCM TO OTHER CUCM.
+configure terminal
+ dial-peer voice 11 Voip
+ destination-pattern 11..
+ session target ipv4:10.11.100.4
+ codec g711ULAW
+  
+ dial-peer voice 21 Voip
+ destination-pattern 21..
+ session target ipv4:10.21.100.4
+ codec g711ULAW
+
+!Connect to other classmates:
+config t
+Int fa 0/0
+no shut
+ip add 200.0.0.m 255.255.255.0
+router ospf 1
+network 0.0.0.0 255.255.255.255 area 0
+do sh ip ospf neighbor
+
+
+***********************************************************
+
 @@IF AUTONOMOUS WIFI CAN'T PING
 @CUCM
 
